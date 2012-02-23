@@ -22,8 +22,16 @@ $query = array(
 
 $city = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$_SERVER['REMOTE_ADDR'])); // Courtesy of geoplugin.net, automatically find users latitude and longitude 
 if (isset($city)){
-	$query['loc'] = "(".$city['geoplugin_latitude'].",".$city['geoplugin_longitude'].")"; // set the latitude and longitude
-}	else {
+	if (isset($city['geoplugin_latitude'])){
+		if ($city['geoplugin_latitude'] != ""){
+			$query['loc'] = "(".$city['geoplugin_latitude'].",".$city['geoplugin_longitude'].")"; // set the latitude and longitude
+		} else {
+			$query['online'] = 'true'; // If no latitude and longitude found, then show all online deals.
+		}
+	} else {
+		$query['online'] = 'true'; // If no latitude and longitude found, then show all online deals.
+	}
+} else {
 	$query['online'] = 'true'; // If no latitude and longitude found, then show all online deals.
 }
 
