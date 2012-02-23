@@ -9,9 +9,9 @@ $format 	= 'json';
 
 
 $query = array(
-			'city'		=>		'new-york',				// City code, for all city codes please refer to http://sidebuy.com/api/cities
-			'limit'		=>		'0-100',				// Return 100 deals. Starting from 0 to 100
-			'sort'		=>		'expiryepoch|1'			// Sort by expiry, DESC
+			'city'		=>		'new-york',	// City code, for all city codes please refer to http://sidebuy.com/api/cities
+			'limit'		=>		'0-100',	// Return 100 deals. Starting from 0 to 100
+			'sort'		=>		'expiryepoch|1'	// Sort by expiry, DESC
 		);
 
 
@@ -19,19 +19,16 @@ $query = array(
 $query['format'] = $format;
 $API_END_POINT = 'http://v1.sidebuy.com/api/get/'.$API_KEY.'/?'.http_build_query($query);
 
-
 $ch = curl_init($API_END_POINT);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HEADER, 0);
-$data = curl_exec($ch); 			// Sidebuy response
-curl_close($ch);
+$data = curl_exec($ch); 	// Sidebuy response
+curl_close($ch);	
+$response =  json_decode($data, true);	// Decode JSON String
 
-$response = json_decode($data);		// Decode JSON String
-
+//print_r($response);	// Uncomment to see all data returned
 
 foreach ($response as $deal){
-	echo "Deal title: ".$deal['title']."\r\n";
+	echo "Deal title: ".htmlspecialchars_decode($deal['title'])." - Price: ".$deal['price']."<br/>";
 }
-
-
 ?>
