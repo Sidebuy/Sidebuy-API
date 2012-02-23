@@ -30,15 +30,12 @@ if (isset($city)){
 $query['format'] = $format;
 $API_END_POINT = 'http://v1.sidebuy.com/api/get/'.$API_KEY.'/?'.http_build_query($query); // Create the query string
 
-$ch = curl_init($API_END_POINT); // CURL to get data from sidebuy
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-$data = curl_exec($ch); 	// Sidebuy response
-curl_close($ch);	
-$response =  json_decode($data, true);	// Decode JSON String
+$response =  json_decode(file_get_contents($API_END_POINT), true);	// Decode JSON String
 ?>
 <div class="deals">
-<?php foreach ($response as $deal){ // loop through all deals?>
+<?php 
+	if (sizeof($response) > 0) {
+	foreach ($response as $deal){ // loop through all deals?>
 	
 	<?php
 	if (isset($deal['merchant']['address'])){
@@ -79,6 +76,10 @@ $response =  json_decode($data, true);	// Decode JSON String
 	<div class="deal_expiry line_2"><?php echo $deal['expiryepoch'];?> left</div>
 	</div>
 	</div>	
+<?php 
+}// end loop
+} else { ?>
+	<div>No deals in your area at the moment. Please check back soon.</div>
 <?php } ?>
 </div>
 <style type="text/css">
