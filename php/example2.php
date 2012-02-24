@@ -21,19 +21,21 @@ $query = array(
 		);
 
 $city = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$_SERVER['REMOTE_ADDR'])); // Courtesy of geoplugin.net, automatically find users latitude and longitude 
+print_r($city);
 if (isset($city)){
-	if (isset($city['geoplugin_latitude'])){
-		if ($city['geoplugin_latitude'] != ""){
-			$query['loc'] = "(".$city['geoplugin_latitude'].",".$city['geoplugin_longitude'].")"; // set the latitude and longitude
-		} else {
-			$query['online'] = 'true'; // If no latitude and longitude found, then show all online deals.
-		}
+	if ($city['geoplugin_latitude']!= ""){
+		$query['loc'] = "(".$city['geoplugin_latitude'].",".$city['geoplugin_longitude'].")"; // set the latitude and longitude
 	} else {
-		$query['online'] = 'true'; // If no latitude and longitude found, then show all online deals.
+		unset($query['mkm']);
+		unset($query['range']);
+		$query['online'] = 'true';
 	}
 } else {
-	$query['online'] = 'true'; // If no latitude and longitude found, then show all online deals.
-}
+	unset($query['mkm']);
+	unset($query['range']);
+	$query['online'] = 'true';
+}	
+
 
 $query['format'] = $format;
 $API_END_POINT = 'http://v1.sidebuy.com/api/get/'.$API_KEY.'/?'.http_build_query($query); // Create the query string
