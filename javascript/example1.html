@@ -1,0 +1,55 @@
+<!--
+This example is provided by Sidebuy API Team.
+You need to change the API Key to the one you obtained from Sidebuy in Order to be able to use these examples
+For any question or difficulties using this example, email reza@sidebuy.com
+-->
+
+<html> 
+<head> 
+<title>Sidebuy API Example</title> 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script> 
+<script type="text/javascript" src="https://raw.github.com/padolsey/prettyPrint.js/master/prettyprint.js"></script>
+<script type="text/javascript">
+
+var api_key = 'abc62ee1fd09c296fb9f45702063a374'	//API KEY to be replaced with your own API KEY obtained from Sidebuy
+
+var city = 'new-york';		// Set Location
+var limit = '0-100';
+var sort = 'expiryepoch|1';
+
+var message = { 
+  'action': 'http://v1.sidebuy.com/api/get/'+api_key+'/?'+'city='+city+'&limit='+limit+'&sort='+sort,
+  'method': 'GET'
+};
+
+/*
+You can use coordinates instead of using city name. This is useful when using for example Google maps and showing deals on a map.
+Sidebuy.com's own application also uses coordinates to pull deals from the API.
+
+var loc = '(49.3493514, -123.1889754)';
+var range = 50;
+var mkm = 'km';
+var message = { 
+  'action': 'http://v1.sidebuy.com/api/get/'+api_key+'/?'+'loc='+loc+'&range='+range+'&mkm='+mkm,
+  'method': 'GET'
+};
+*/
+
+$.ajax({
+  'url': message.action,
+  'cache': true,
+  'dataType': 'jsonp',
+  'jsonpCallback': 'cb'
+});
+function cb(data){
+	for (var i = 0; i < data.length; i++) {
+		$('#deals').append('<li>'+data[i]['title']+'</li>');
+	}
+}
+
+</script>
+</head> 
+<body>
+<div id="deals"></div>
+</body>
+</html>
