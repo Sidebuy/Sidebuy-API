@@ -21,7 +21,7 @@ $query = array(
 		);
 
 $city = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$_SERVER['REMOTE_ADDR'])); // Courtesy of geoplugin.net, automatically find users latitude and longitude 
-
+print_r($city);
 if (isset($city)){
 	if ($city['geoplugin_latitude']!= ""){
 		$query['loc'] = "(".$city['geoplugin_latitude'].",".$city['geoplugin_longitude'].")"; // set the latitude and longitude
@@ -38,7 +38,7 @@ if (isset($city)){
 
 
 $query['format'] = $format;
-$API_END_POINT = 'http://v1.sidebuy.com/api/get/'.$API_KEY.'/?'.http_build_query($query); // Create the query string
+$API_END_POINT = 'http://v1.sidebuy.com/api/get/'.$API_KEY.'/?'.http_build_query($query, '', '&'); // Create the query string
 
 $response =  json_decode(file_get_contents($API_END_POINT), true);	// Decode JSON String
 ?>
